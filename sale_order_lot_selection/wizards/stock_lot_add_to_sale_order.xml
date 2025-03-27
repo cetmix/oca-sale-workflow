@@ -1,0 +1,56 @@
+<odoo>
+    <record id="view_stock_lot_add_to_sale_order_wizard" model="ir.ui.view">
+        <field name="name">stock.lot.add.to.sale.order.wizard.form</field>
+        <field name="model">stock.lot.add.to.sale.order.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Lot to Sale Order" create="false" edit="false">
+                <group>
+                    <field name="sale_order_id" />
+                    <field
+                        name="partner_id"
+                        attrs="{'readonly': [('sale_order_id', '!=', False)]}"
+                    />
+                </group>
+                <field name="line_ids">
+                    <tree editable="bottom">
+                        <field name="lot_id" />
+                        <field name="product_id" optional="hide" />
+                        <field name="quantity" />
+                        <field name="max_qty" optional="hide" />
+                    </tree>
+                </field>
+                <footer>
+                    <button
+                        name="action_add_lots"
+                        type="object"
+                        string="Add"
+                        class="btn-primary"
+                    />
+                    <button
+                        name="action_create_sale_order"
+                        type="object"
+                        string="New"
+                        class="btn-secondary"
+                    />
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_stock_lot_add_to_sale_order" model="ir.actions.server">
+        <field name="name">Create Quotation</field>
+        <field name="model_id" ref="stock.model_stock_lot" />
+        <field name="binding_model_id" ref="stock.model_stock_lot" />
+        <!-- <field name="groups_id"  eval="[(4, ref('stock.group_production_lot'))]"/> -->
+        <field name="binding_view_types">tree</field>
+        <field name="state">code</field>
+        <field name="code">
+    if records:
+        wizard = env["stock.lot.add.to.sale.order.wizard"].create({})
+        action = wizard.open_wizard(records)
+        </field>
+    </record>
+
+
+</odoo>
