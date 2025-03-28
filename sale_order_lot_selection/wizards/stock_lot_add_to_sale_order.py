@@ -2,7 +2,7 @@
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
 from odoo import _, api, fields, models
-from odoo.exceptions import ValidationError
+from odoo.exceptions import AccessError, ValidationError
 
 
 class StockLotAddToSaleOrder(models.TransientModel):
@@ -18,13 +18,12 @@ class StockLotAddToSaleOrder(models.TransientModel):
     sale_order_id = fields.Many2one(
         "sale.order",
         string="Sale Order",
-        domain="[('state', 'in', ['draft', 'sent'])]",
+        domain="[('state', 'not in', ['done', 'cancel'])]",
     )
 
     partner_id = fields.Many2one(
         "res.partner",
         string="Customer",
-        required=False,
         store=True,
         compute="_compute_partner_id",
     )
@@ -32,9 +31,7 @@ class StockLotAddToSaleOrder(models.TransientModel):
     @api.depends("sale_order_id")
     def _compute_partner_id(self):
         for record in self:
-            record.partner_id = (
-                record.sale_order_id.partner_id.id if record.sale_order_id else False
-            )
+            record.partner_id = record.sale_order_id.partner_id.id
 
     def open_wizard(self, lot_ids):
         """Open the wizard with selected lots."""
@@ -43,65 +40,71 @@ class StockLotAddToSaleOrder(models.TransientModel):
             .sudo()
             .get_param("sale_order_lot_selection.allow_generate_from_lots")
         ):
-            raise ValidationError(
-                _("You are not allowed to generate Sale Order from Lot.")
-            )
-        self.write(
-            {
-                "line_ids": [
-                    (0, 0, {"lot_id": lot_id.id, "quantity": 1.0}) for lot_id in lot_ids
-                ]
-            }
-        )
+            raise AccessError(_("You are not allowed to generate Sale Order from Lot."))
+        vals = {
+            "line_ids": [
+                (
+                    0,
+                    0,
+                    {
+                        "lot_id": lot_id.id,
+                        "quantity": lot_id.product_qty,
+                    },
+                )
+                for lot_id in lot_ids
+            ]
+        }
+        wizard_id = self.create(vals)
+
         return {
             "type": "ir.actions.act_window",
             "name": "Add Lot to Sale Order",
             "res_model": self._name,
             "view_mode": "form",
-            "res_id": self.id,
+            "res_id": wizard_id.id,
             "target": "new",
         }
 
-    def action_add_lots(self):
-        """Add selected lots to the sale order."""
+    def action_add_lots_to_sale_order(self):
+        """Add selected lots to the existing sale order."""
         self.ensure_one()
-        sale_order_lot_ids = self.sale_order_id.order_line.lot_id
-        lot_to_add_ids = self.line_ids.lot_id - sale_order_lot_ids
+        if not self.sale_order_id:
+            raise ValidationError(_("Please select a Sale Order"))
         self.sale_order_id.write(
             {
-                "order_line": self._get_vals_for_add_lot_in_sale_order_line(
-                    lot_to_add_ids
-                ),
+                "order_line": self._get_vals_for_add_lot_in_sale_order_line(),
             }
         )
-
         return self._action_open_sale_order()
 
     def action_create_sale_order(self):
         """Create a sale order from the selected lots."""
         self.ensure_one()
+        if not self.partner_id:
+            raise ValidationError(_("Please select a Customer"))
         self.sale_order_id = self.env["sale.order"].create(
             {
                 "partner_id": self.partner_id.id,
-                "order_line": self._get_vals_for_add_lot_in_sale_order_line(
-                    self.line_ids.lot_id
-                ),
+                "order_line": self._get_vals_for_add_lot_in_sale_order_line(),
             }
         )
         return self._action_open_sale_order()
 
-    def _get_vals_for_add_lot_in_sale_order_line(self, lot_ids):
+    def _get_vals_for_add_lot_in_sale_order_line(self):
         """Get values for adding lot in sale order line."""
+        if not self.line_ids:
+            raise ValidationError(_("Please select at least one lot"))
         return [
             (
                 0,
                 0,
                 {
-                    "lot_id": lot_id.id,
-                    "product_id": lot_id.product_id.id,
+                    "lot_id": line_id.lot_id.id,
+                    "product_id": line_id.lot_id.product_id.id,
+                    "product_uom_qty": line_id.quantity,
                 },
             )
-            for lot_id in lot_ids
+            for line_id in self.line_ids
         ]
 
     def _action_open_sale_order(self):
@@ -131,7 +134,7 @@ class StockLotAddToSaleOrderLine(models.TransientModel):
         required=True,
     )
     product_id = fields.Many2one(related="lot_id.product_id")
-    quantity = fields.Float(string="Quantity", required=True)  # pylint: disable=W8113
+    quantity = fields.Float(string="Quantity")  # pylint: disable=W8113
     max_qty = fields.Float(string="Max Quantity", related="lot_id.product_qty")
 
     @api.constrains("quantity")

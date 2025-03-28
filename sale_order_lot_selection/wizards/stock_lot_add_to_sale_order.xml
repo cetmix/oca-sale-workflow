@@ -3,9 +3,12 @@
         <field name="name">stock.lot.add.to.sale.order.wizard.form</field>
         <field name="model">stock.lot.add.to.sale.order.wizard</field>
         <field name="arch" type="xml">
-            <form string="Add Lot to Sale Order" create="false" edit="false">
+            <form string="Add Lot to Sale Order" create="false">
                 <group>
-                    <field name="sale_order_id" />
+                    <field
+                        name="sale_order_id"
+                        placeholder="Select an existing sale order or leave empty to create a new one"
+                    />
                     <field
                         name="partner_id"
                         attrs="{'readonly': [('sale_order_id', '!=', False)]}"
@@ -21,7 +24,7 @@
                 </field>
                 <footer>
                     <button
-                        name="action_add_lots"
+                        name="action_add_lots_to_sale_order"
                         type="object"
                         string="Add"
                         class="btn-primary"
@@ -31,6 +34,7 @@
                         type="object"
                         string="New"
                         class="btn-secondary"
+                        attrs="{'invisible': [('sale_order_id', '!=', False)]}"
                     />
                     <button string="Cancel" class="btn-secondary" special="cancel" />
                 </footer>
@@ -42,13 +46,11 @@
         <field name="name">Create Quotation</field>
         <field name="model_id" ref="stock.model_stock_lot" />
         <field name="binding_model_id" ref="stock.model_stock_lot" />
-        <!-- <field name="groups_id"  eval="[(4, ref('stock.group_production_lot'))]"/> -->
         <field name="binding_view_types">tree</field>
         <field name="state">code</field>
         <field name="code">
     if records:
-        wizard = env["stock.lot.add.to.sale.order.wizard"].create({})
-        action = wizard.open_wizard(records)
+        action = env["stock.lot.add.to.sale.order.wizard"].open_wizard(records)
         </field>
     </record>
 
