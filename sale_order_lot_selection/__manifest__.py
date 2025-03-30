@@ -17,6 +17,6 @@
         "wizards/stock_lot_add_to_sale_order.xml",
     ],
     "demo": ["demo/sale_demo.xml"],
-    "maintainers": ["bodedra", "halbtonjazz"],
+    "maintainers": ["bodedra"],
     "installable": True,
 }

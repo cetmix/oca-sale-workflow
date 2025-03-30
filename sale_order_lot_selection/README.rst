@@ -151,13 +151,10 @@ promote its widespread use.
 .. |maintainer-bodedra| image:: https://github.com/bodedra.png?size=40px
     :target: https://github.com/bodedra
     :alt: bodedra
-.. |maintainer-halbtonjazz| image:: https://github.com/halbtonjazz.png?size=40px
-    :target: https://github.com/halbtonjazz
-    :alt: halbtonjazz
 
-Current `maintainers <https://odoo-community.org/page/maintainer-role>`__:
+Current `maintainer <https://odoo-community.org/page/maintainer-role>`__:
 
-|maintainer-bodedra| |maintainer-halbtonjazz| 
+|maintainer-bodedra| 
 
 This module is part of the `OCA/sale-workflow <https://github.com/OCA/sale-workflow/tree/16.0/sale_order_lot_selection>`_ project on GitHub.
 
