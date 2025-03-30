@@ -1,3 +1,6 @@
+# Copyright (C) 2025 Cetmix OÜ
+# License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
+
 {
     "name": "Sale Order Lot Selection",
     "version": "16.0.1.0.1",
@@ -14,6 +17,6 @@
         "wizards/stock_lot_add_to_sale_order.xml",
     ],
     "demo": ["demo/sale_demo.xml"],
-    "maintainers": ["bodedra"],
+    "maintainers": ["bodedra", "halbtonjazz"],
     "installable": True,
 }
