@@ -13,10 +13,10 @@
                     groups="stock.group_production_lot"
                 >
                     <div class="o_setting_left_pane">
-                        <field name="is_allow_generate_from_lots" />
+                        <field name="allow_generate_so_from_lots" />
                     </div>
                     <div class="o_setting_right_pane">
-                        <label for="is_allow_generate_from_lots" />
+                        <label for="allow_generate_so_from_lots" />
                         <div class="text-muted">
                             Allow to generate Sale Quotations from stock lots
                         </div>

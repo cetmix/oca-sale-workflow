@@ -5,8 +5,8 @@
 -->
 <odoo>
     <record id="view_stock_lot_add_to_sale_order_wizard" model="ir.ui.view">
-        <field name="name">stock.lot.add.to.sale.order.wizard.form</field>
-        <field name="model">stock.lot.add.to.sale.order.wizard</field>
+        <field name="name">stock.lot.sale.order.wizard.form</field>
+        <field name="model">stock.lot.sale.order.wizard</field>
         <field name="arch" type="xml">
             <form string="Add Lot to Sale Order" create="false">
                 <group>
@@ -54,8 +54,8 @@
         <field name="binding_view_types">tree</field>
         <field name="state">code</field>
         <field name="code">
-    if records:
-        action = env["stock.lot.add.to.sale.order.wizard"].open_wizard(records)
+if records:
+    action = records.action_generate_sale_order()
         </field>
     </record>
 </odoo>

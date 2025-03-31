@@ -6,23 +6,24 @@ from odoo.tests.common import TransactionCase
 
 
 class TestAddLotToSaleOrder(TransactionCase):
-    def setUp(self):
-        super().setUp()
-        self.sale = self.env.ref("sale_order_lot_selection.sale1")
-        self.sale_empty = self.env["sale.order"].create(
+    @classmethod
+    def setUpClass(cls):
+        super().setUpClass()
+        cls.sale = cls.env.ref("sale_order_lot_selection.sale1")
+        cls.sale_empty = cls.env["sale.order"].create(
             {
-                "partner_id": self.sale.partner_id.id,
-                "user_id": self.env.ref("base.user_admin").id,
+                "partner_id": cls.sale.partner_id.id,
+                "user_id": cls.env.ref("base.user_admin").id,
             }
         )
-        self.lot_cable = self.env.ref("sale_order_lot_selection.lot_cable")
-        self.env["ir.config_parameter"].sudo().set_param(
+        cls.lot_cable = cls.env.ref("sale_order_lot_selection.lot_cable")
+        cls.env["ir.config_parameter"].sudo().set_param(
             "sale_order_lot_selection.allow_generate_from_lots", True
         )
 
     def test_create_sale_order_with_lots(self):
         """Test creating a new sale order from selected lot via wizard."""
-        wizard = self.env["stock.lot.add.to.sale.order.wizard"].create(
+        wizard = self.env["stock.lot.sale.order.wizard"].create(
             {
                 "line_ids": [
                     (
@@ -47,7 +48,8 @@ class TestAddLotToSaleOrder(TransactionCase):
         self.assertEqual(sale_order.order_line.product_id, self.lot_cable.product_id)
 
     def test_add_lots_to_existing_sale_order(self):
-        wizard = self.env["stock.lot.add.to.sale.order.wizard"].create(
+        """Test adding selected lots to an existing sale order."""
+        wizard = self.env["stock.lot.sale.order.wizard"].create(
             {
                 "sale_order_id": self.sale_empty.id,
                 "line_ids": [
@@ -73,7 +75,7 @@ class TestAddLotToSaleOrder(TransactionCase):
 
     def test_error_if_no_partner_on_create(self):
         """Test that wizard raises error when trying to create sale order without partner."""
-        wizard = self.env["stock.lot.add.to.sale.order.wizard"].create(
+        wizard = self.env["stock.lot.sale.order.wizard"].create(
             {
                 "line_ids": [
                     (
@@ -93,7 +95,7 @@ class TestAddLotToSaleOrder(TransactionCase):
 
     def test_error_if_no_sale_order_on_add(self):
         """Test error when adding lots without sale order selection."""
-        wizard = self.env["stock.lot.add.to.sale.order.wizard"].create(
+        wizard = self.env["stock.lot.sale.order.wizard"].create(
             {
                 "line_ids": [
                     (
@@ -118,15 +120,13 @@ class TestAddLotToSaleOrder(TransactionCase):
         )
 
         with self.assertRaises(AccessError):
-            self.env["stock.lot.add.to.sale.order.wizard"].open_wizard(self.lot_cable)
+            self.lot_cable.action_generate_sale_order()
 
         self.env["ir.config_parameter"].sudo().set_param(
             "sale_order_lot_selection.allow_generate_from_lots", True
         )
 
-        result = self.env["stock.lot.add.to.sale.order.wizard"].open_wizard(
-            self.lot_cable
-        )
+        result = self.lot_cable.action_generate_sale_order()
         self.assertTrue(
             result, "Wizard should open when generation from lots is allowed"
         )
