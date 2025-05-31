@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <template
+        id="delivery_form_template"
+        name="Delivery Form Template"
+        inherit_id="website_sale.delivery_form"
+    >
+        <xpath expr="//form[@id='o_delivery_form']" position="inside">
+            <div id="delivery_date_container" class="form-group">
+                <label for="delivery_date">Delivery Date</label>
+                <div class="input-group date" id="delivery_date_picker">
+                    <input
+                        type="text"
+                        id="delivery_date"
+                        name="delivery_date"
+                        class="form-control"
+                        readonly="readonly"
+                    />
+                    <span class="input-group-addon">
+                        <i class="fa fa-calendar" />
+                    </span>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
