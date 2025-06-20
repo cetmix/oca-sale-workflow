@@ -11,13 +11,13 @@ class DeliveryWeekdayRule(models.Model):
     _order = "weekday, delivery_start_hour"
 
     WEEKDAY_SELECTION = [
-        ("monday", "Monday"),
-        ("tuesday", "Tuesday"),
-        ("wednesday", "Wednesday"),
-        ("thursday", "Thursday"),
-        ("friday", "Friday"),
-        ("saturday", "Saturday"),
-        ("sunday", "Sunday"),
+        ("0", "Monday"),
+        ("1", "Tuesday"),
+        ("2", "Wednesday"),
+        ("3", "Thursday"),
+        ("4", "Friday"),
+        ("5", "Saturday"),
+        ("6", "Sunday"),
     ]
 
     name = fields.Char(compute="_compute_name", store=True)

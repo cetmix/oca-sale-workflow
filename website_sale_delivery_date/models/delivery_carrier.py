@@ -1,6 +1,8 @@
 # Copyright Cetmix OU 2025
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from datetime import timedelta
+
 from odoo import _, api, fields, models
 from odoo.exceptions import ValidationError
 
@@ -35,3 +37,22 @@ class DeliveryCarrier(models.Model):
         for record in self:
             if record.min_delivery_delay < 0:
                 raise ValidationError(_("Minimum delivery delay cannot be negative"))
+
+    def get_delivery_constraints(self):
+        self.ensure_one()
+        now = fields.Datetime.now()
+
+        # Calculate minimum delivery date
+        if self.min_delivery_delay_type == "hours":
+            min_date = now + timedelta(hours=self.min_delivery_delay)
+        else:  # days
+            min_date = now + timedelta(days=self.min_delivery_delay)
+            min_date = min_date.replace(hour=0, minute=0, second=0, microsecond=0)
+
+        # Calculate maximum delivery date (e.g., 30 days from now)
+        max_date = now + timedelta(days=30)
+
+        return {
+            "min_date": min_date.strftime("%Y-%m-%d"),
+            "max_date": max_date.strftime("%Y-%m-%d"),
+        }

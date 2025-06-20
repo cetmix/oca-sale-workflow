@@ -21,7 +21,7 @@
     ],
     "assets": {
         "web.assets_frontend": [
-            "website_sale_delivery_date/static/src/js/website_sale_delivery_date.js",
+            "website_sale_delivery_date/static/src/js/*.js",
         ],
     },
     "installable": True,

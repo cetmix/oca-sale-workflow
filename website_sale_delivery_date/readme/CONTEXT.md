@@ -9,19 +9,21 @@ To support realistic and flexible delivery scheduling, the module introduces con
 
 The delivery lag is highly customizable by supporting two delay types:
 
-### Days
+**Days**
+
 Minimum delay is interpreted as full calendar days.
 For example, a delay of 1 day means orders placed on Monday can be delivered starting Tuesday at 11:00.
 
-### Hours
+**Hours**
+
 Minimum delay is interpreted as an exact number of hours (including fractional hours) from the time the order is placed.
 For example, a delay of 11 hours means an order placed at 23:59 on Monday can be delivered starting Tuesday at 11:00.
 
 This flexibility allows the delivery scheduling logic to closely match real-world logistics, cut-off times, and customer expectations.
 
-## Example Use Cases
+**Example Use Cases**
 
-### Example 1: Delay Type = Hours
+*Example 1: Delay Type = Hours*
 
 **Configuration:**
 - Available delivery days: Monday to Friday
@@ -33,7 +35,7 @@ This flexibility allows the delivery scheduling logic to closely match real-worl
 - An order placed Monday at 09:00 can be delivered earliest Tuesday at 11:00
 - An order placed Monday at 12:00 can be delivered earliest Wednesday at 11:00
 
-### Example 2: Delay Type = Days
+*Example 2: Delay Type = Days*
 
 **Configuration:**
 - Available delivery days: Monday to Friday

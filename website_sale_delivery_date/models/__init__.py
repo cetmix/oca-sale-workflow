@@ -3,3 +3,4 @@
 
 from . import delivery_carrier
 from . import delivery_weekday_rule
+from . import sale_order

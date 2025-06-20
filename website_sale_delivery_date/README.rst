@@ -64,15 +64,13 @@ introduces configurable constraints on delivery timing, including:
 
 The delivery lag is highly customizable by supporting two delay types:
 
-Days
-~~~~
+**Days**
 
 Minimum delay is interpreted as full calendar days. For example, a delay
 of 1 day means orders placed on Monday can be delivered starting Tuesday
 at 11:00.
 
-Hours
-~~~~~
+**Hours**
 
 Minimum delay is interpreted as an exact number of hours (including
 fractional hours) from the time the order is placed. For example, a
@@ -82,11 +80,9 @@ delivered starting Tuesday at 11:00.
 This flexibility allows the delivery scheduling logic to closely match
 real-world logistics, cut-off times, and customer expectations.
 
-Example Use Cases
------------------
+**Example Use Cases**
 
-Example 1: Delay Type = Hours
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*Example 1: Delay Type = Hours*
 
 **Configuration:**
 
@@ -102,8 +98,7 @@ Example 1: Delay Type = Hours
 - An order placed Monday at 12:00 can be delivered earliest Wednesday at
   11:00
 
-Example 2: Delay Type = Days
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+*Example 2: Delay Type = Days*
 
 **Configuration:**
 
@@ -123,32 +118,27 @@ the selected delivery date.
 Configuration
 =============
 
-Delivery Method Time and Date Constraints Configuration
--------------------------------------------------------
+**Delivery Method Time and Date Constraints Configuration**
 
-Delivery Method Setup
-~~~~~~~~~~~~~~~~~~~~~
+**Delivery Method Setup**
 
 1. Go to Sales → Configuration → Delivery Methods
 2. Open an existing Delivery Method or create a new one
 3. Under the Availability tab, find the Weekly Delivery Schedule section
 
-Minimum Delivery Delay (min_delivery_delay)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Minimum Delivery Delay (min_delivery_delay)**
 
 Defines the minimal lead time between order placement and the earliest
 possible delivery.
 
-Minimum Delivery Delay Type (min_delivery_delay_type)
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**Minimum Delivery Delay Type (min_delivery_delay_type)**
 
 Controls how the delay is interpreted:
 
 - **days**: Delay is in full calendar days (e.g., 1 = next day)
 - **hours**: Delay is in exact hours from the moment of order
 
-Weekday Configuration
----------------------
+**Weekday Configuration**
 
 For each weekday, configure the following parameters:
 
