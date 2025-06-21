@@ -77,5 +77,11 @@ class SaleOrder(models.Model):
                         cutoff_hour=weekday_rule.cutoff_hour,
                     )
                 )
-        self.commitment_date = delivery_date
+        self.write({"commitment_date": delivery_date})
         return True
+
+    def _set_delivery_method(self, delivery_method, rate=None):
+        result = super()._set_delivery_method(delivery_method, rate)
+        if delivery_method and self._has_deliverable_products():
+            self.write({"commitment_date": False})
+        return result

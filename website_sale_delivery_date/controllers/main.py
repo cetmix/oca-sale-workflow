@@ -1,9 +1,8 @@
 # Copyright Cetmix OU 2025
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
-from datetime import datetime
 
-from odoo import _, http
+from odoo import _, fields, http
 from odoo.exceptions import ValidationError
 from odoo.http import request
 
@@ -27,14 +26,14 @@ class WebsiteSaleDeliveryDate(WebsiteSale):
         """Validate the selected delivery date."""
         if not delivery_date or not carrier_id:
             return {"valid": False, "message": _("Invalid input")}
+        order = request.website.sale_get_order()
         try:
-            delivery_date = datetime.strptime(delivery_date, "%Y-%m-%d %H:%M")
+            delivery_date = fields.datetime.strptime(delivery_date, "%Y-%m-%d %H:%M")
         except Exception:
             return {"valid": False, "message": _("Invalid date format")}
         carrier = request.env["delivery.carrier"].sudo().browse(int(carrier_id))
         if not carrier.exists():
             return {"valid": False, "message": _("Invalid carrier")}
-        order = request.website.sale_get_order()
         try:
             order.set_delivery_date(delivery_date)
         except ValidationError as e:

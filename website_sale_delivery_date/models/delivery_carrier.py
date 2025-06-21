@@ -53,6 +53,7 @@ class DeliveryCarrier(models.Model):
         max_date = now + timedelta(days=30)
 
         return {
+            "visible": len(self.weekday_rule_ids) > 0,
             "min_date": min_date.strftime("%Y-%m-%d"),
             "max_date": max_date.strftime("%Y-%m-%d"),
         }
