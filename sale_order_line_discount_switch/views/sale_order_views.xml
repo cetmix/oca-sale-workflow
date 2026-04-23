@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Copyright 2026 Cetmix
+     License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl). -->
+<odoo>
+    <record id="view_order_form" model="ir.ui.view">
+        <field name="name">sale.order.form - sale_order_line_discount_switch</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_fixed_discount.view_order_form" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//field[@name='order_line']/form//field[@name='discount_fixed']"
+                position="before"
+            >
+                <field
+                    name="discount_mode"
+                    groups="product.group_discount_per_so_line"
+                />
+            </xpath>
+            <xpath
+                expr="//field[@name='order_line']/form//field[@name='discount_fixed']"
+                position="attributes"
+            >
+                <attribute
+                    name="attrs"
+                >{'invisible': [('discount_mode', '=', 'percent')]}</attribute>
+            </xpath>
+            <xpath
+                expr="//field[@name='order_line']/form//label[@for='discount']"
+                position="attributes"
+            >
+                <attribute
+                    name="attrs"
+                >{'invisible': [('discount_mode', '=', 'fixed')]}</attribute>
+            </xpath>
+            <xpath
+                expr="//field[@name='order_line']/form//div[@name='discount']"
+                position="attributes"
+            >
+                <attribute
+                    name="attrs"
+                >{'invisible': [('discount_mode', '=', 'fixed')]}</attribute>
+            </xpath>
+            <xpath
+                expr="//field[@name='order_line']/tree/field[@name='discount_fixed']"
+                position="before"
+            >
+                <field
+                    name="discount_mode"
+                    optional="show"
+                    groups="product.group_discount_per_so_line"
+                />
+            </xpath>
+            <xpath
+                expr="//field[@name='order_line']/tree/field[@name='discount_fixed']"
+                position="attributes"
+            >
+                <attribute
+                    name="attrs"
+                >{'invisible': [('discount_mode', '=', 'percent')]}</attribute>
+            </xpath>
+            <xpath
+                expr="//field[@name='order_line']/tree/field[@name='discount']"
+                position="attributes"
+            >
+                <attribute
+                    name="attrs"
+                >{'invisible': [('discount_mode', '=', 'fixed')]}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
