@@ -1,1 +1,2 @@
 odoo_test_helper
+odoo-addon-sale_order_general_discount_fixed @ git+https://${RUNBOAT_GITHUB_TOKEN}@github.com/cetmix/oca-sale-workflow.git@refs/pull/7/head#subdirectory=setup/sale_order_general_discount_fixed
