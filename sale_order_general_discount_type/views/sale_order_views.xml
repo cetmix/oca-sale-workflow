@@ -1,6 +1,6 @@
 <odoo>
-    <record id="sale_order_view_form_discount_type" model="ir.ui.view">
-        <field name="name">sale.order.form.discount.type</field>
+    <record id="sale_order_view_form_discount_type_percent" model="ir.ui.view">
+        <field name="name">sale.order.form.discount.type.percent</field>
         <field name="model">sale.order</field>
         <field
             name="inherit_id"
@@ -8,17 +8,35 @@
         />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='general_discount']" position="before">
-                <field name="general_discount_type" />
-            </xpath>
-
-            <xpath expr="//field[@name='general_discount']" position="after">
-                <xpath expr="//field[@name='general_discount_fixed']" position="move" />
+                <field
+                    name="general_discount_type"
+                    class="oe_subtotal_footer"
+                    attrs="{'invisible': [('general_discount_type', '=', 'fixed')]}"
+                />
             </xpath>
 
             <xpath expr="//field[@name='general_discount']" position="attributes">
                 <attribute
                     name="attrs"
                 >{'invisible': [('general_discount_type', '=', 'fixed')]}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="sale_order_view_form_discount_type_fixed" model="ir.ui.view">
+        <field name="name">sale.order.form.discount.type.fixed</field>
+        <field name="model">sale.order</field>
+        <field
+            name="inherit_id"
+            ref="sale_order_general_discount_fixed.view_order_form"
+        />
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='general_discount_fixed']" position="before">
+                <field
+                    name="general_discount_type"
+                    class="oe_subtotal_footer"
+                    attrs="{'invisible': [('general_discount_type', '=', 'percent')]}"
+                />
             </xpath>
 
             <xpath expr="//field[@name='general_discount_fixed']" position="attributes">

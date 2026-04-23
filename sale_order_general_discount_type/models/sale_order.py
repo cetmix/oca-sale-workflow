@@ -84,7 +84,12 @@ class SaleOrder(models.Model):
         result = super().write(vals)
         if self.env.context.get(SKIP_DISCOUNT_TYPE_CLEANUP_CONTEXT_KEY):
             return result
-        if {"general_discount_type", "partner_id"}.intersection(vals):
+        if {
+            "general_discount_type",
+            "partner_id",
+            "general_discount",
+            "general_discount_fixed",
+        }.intersection(vals):
             self._cleanup_hidden_discount_field()
         return result
 
