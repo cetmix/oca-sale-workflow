@@ -115,6 +115,7 @@ dependencies = [
     "odoo-addon-sale_order_split_strategy==18.0.*",
     "odoo-addon-sale_order_tag==18.0.*",
     "odoo-addon-sale_order_team_from_product==18.0.*",
+    "odoo-addon-sale_order_template_from_sale_order==18.0.*",
     "odoo-addon-sale_order_transmit_method==18.0.*",
     "odoo-addon-sale_order_type==18.0.*",
     "odoo-addon-sale_order_type_confirm_message==18.0.*",
